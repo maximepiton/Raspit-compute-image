@@ -26,10 +26,10 @@ if( plot_param .eq. "rain1" ) then
 end if
 
 if( plot_param .eq. "wstar_bsratio" ) then
-  opts_bparam@ContourParameters = (/ 175., 575., 25. /)
+  opts_bparam@ContourParameters = (/ 0.25, 4.75, 0.25 /)
 end if
 
 if( plot_param .eq. "wstar" ) then
-  opts_bparam@ContourParameters = (/ 175., 575., 25. /)
+  opts_bparam@ContourParameters = (/ 0.25, 4.75, 0.25 /)
 end if
 

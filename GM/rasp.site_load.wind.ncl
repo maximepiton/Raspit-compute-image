@@ -2,7 +2,7 @@
 
 ; Constrain SfcWind (10m) *only* to 0-26 Kt in 2 Kt steps
 ;if(plot_param .eq. "sfcwind" ) then
-	opts_ws@ContourParameters = (/ 2., 24., 2. /);
+	opts_ws@ContourParameters = (/ 3.5, 46.5, 3.5 /);
 	; opts_ws@ContourParameters = (/ 0., 0., 1. /);
 ;end if
 
@@ -19,5 +19,5 @@
 
 ; Constrain SfcWind0 (2m) *only* to 0-18 Kt in 2 Kt steps
 if(plot_param .eq. "sfcwind0" ) then
-	opts_ws@ContourParameters = (/ 2., 16., 2. /);
+	opts_ws@ContourParameters = (/ 3.5, 46.5, 3.5 /);
 end if
