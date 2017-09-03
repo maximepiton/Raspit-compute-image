@@ -1998,7 +1998,7 @@ begin
 				opts_bparam@unitString = "kt"
 			else
 				qparaminfo = "Param= "+params(p)+" Unit= m/s Mult= 1"
-				opts_bparam@unitString = "cm/sec"
+				opts_bparam@unitString = "m/sec"
 			end if
 
 			blwindshear_mag = blwindshear(ua, va, z, ter, pblh, nx, ny, nz)
@@ -2019,9 +2019,9 @@ begin
 				opts_bparam@unitString = "ft/min"
 				qparaminfo = "Param= "+params(p)+" Unit= ft/min Mult= 1"
 			else
-				opts_bparam@mult = 100.0
-				qparaminfo = "Param= "+params(p)+" Unit= cm/s Mult= 1"
-				opts_bparam@unitString = "cm/sec"
+				opts_bparam@mult = 1.0
+				qparaminfo = "Param= "+params(p)+" Unit= m/s Mult= 1"
+				opts_bparam@unitString = "m/sec"
 			end if
 
 			if( .not. isvar("wstar_mag")) then
@@ -2155,7 +2155,8 @@ begin
 				opts_bparam@mult = 1.9438445
 				opts_bparam@unitString = "kt"
 			else
-				opts_bparam@unitString = "m/sec"
+				opts_bparam@mult = 3.6
+				opts_bparam@unitString = "km/h"
 			end if
 
 			u0 = new ( (/ny, nx/), float)
@@ -2184,7 +2185,8 @@ begin
 				opts_bparam@mult = 1.9438445
 				opts_bparam@unitString = "kt"
 			else
-				opts_bparam@unitString = "m/sec"
+				opts_bparam@mult = 3.6
+				opts_bparam@unitString = "km/h"
 			end if
 
 			u1 = new ( (/ny, nx/), float)
@@ -2213,7 +2215,8 @@ begin
 				opts_bparam@mult = 1.9438445
 				opts_bparam@unitString = "kt"
 			else
-				opts_bparam@unitString = "m/sec"
+				opts_bparam@mult = 3.6
+				opts_bparam@unitString = "km/h"
 			end if
 
 			u2 = new ( (/ny, nx/), float)
@@ -2242,7 +2245,8 @@ begin
 				opts_bparam@mult = 1.9438445
 				opts_bparam@unitString = "kt"
 			else
-				opts_bparam@unitString = "m/sec"
+				opts_bparam@mult = 3.6
+				opts_bparam@unitString = "km/h"
 			end if
 
 			ut = new ( (/ny, nx/), float)
@@ -2271,7 +2275,8 @@ begin
 				opts_bparam@mult = 1.9438445
 				opts_bparam@unitString = "kt"
 			else
-				opts_bparam@unitString = "m/sec"
+				opts_bparam@mult = 3.6
+				opts_bparam@unitString = "km/h"
 			end if
 
 			blavgwind = new ( (/ny, nx/), float)	; in kt!!!
@@ -2338,10 +2343,10 @@ begin
 				opts_bparam@mult = 1.9685
 				opts_bparam@unitString = "ft/min"
 			else
-				qparaminfo = "Param= "+params(p)+" Unit= cm/s Mult= 1"
+				qparaminfo = "Param= "+params(p)+" Unit= m/s Mult= 1"
 				; opts_bparam@mult = 100.0	; See above - already cm/s
-				opts_bparam@mult = 1.0
-				opts_bparam@unitString = "cm/sec"
+				opts_bparam@mult = 0.01
+				opts_bparam@unitString = "m/sec"
 			end if
 
 			wblMxMn = wblmaxmin(wa, z, ter, pblh, nx, ny, nz)
@@ -2628,8 +2633,8 @@ begin
 				opts_bparam@mult = 196.85039 ; ft/min
 				opts_bparam@unitString = "ft/min"
 			else
-				opts_bparam@mult = 100.
-				opts_bparam@unitString = "cm/sec"
+				opts_bparam@mult = 1.
+				opts_bparam@unitString = "m/sec"
 			end if
 
 			u@lat2d = alat
@@ -2656,9 +2661,9 @@ begin
 				opts_bparam@unitString = "ft/min"
 				qparaminfo = "Param= "+params(p)+" Unit= ft/min Mult= 1"
 			else
-				opts_bparam@mult = 100.0
-				qparaminfo = "Param= "+params(p)+" Unit= cm/s Mult= 1"
-				opts_bparam@unitString = "cm/sec"
+				opts_bparam@mult = 1.
+				qparaminfo = "Param= "+params(p)+" Unit= m/s Mult= 1"
+				opts_bparam@unitString = "m/sec"
 			end if
 
 			if( .not. isvar("wstar_mag")) then
