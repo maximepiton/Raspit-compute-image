@@ -32,7 +32,7 @@
   #ACTIVATE THE NEXT LINE TO PRODUCE 2-STAGE RUN: 
   #for2stage: $LRUN_WINDOW{'PYR2'} = 2 ;
 ###### SET BASIC PARAMETER LIST
-  @{$PARAMETER_DOLIST{'PYR2'}} = ( 'hbl','dbl','hwcrit','dwcrit','wstar','bsratio', 'sfcsunpct','sfcshf', 'blwind','sfcwind', 'zsfclcl','zsfclcldif','zsfclclmask', 'zblcl','zblcldif','zblclmask','blcloudpct','blcwbase', 'boxwmax','press850','press700','press500', 'bltopvariab','bltopwind','wblmaxmin','zwblmaxmin', 'blwindshear', 'sfctemp','sfcdewpt', 'cape', 'wstar_bsratio' );
+  @{$PARAMETER_DOLIST{'PYR2'}} = ( 'hbl','dbl','hwcrit','wstar','bsratio','sfcwind', 'zsfclclmask', 'zblclmask','blcloudpct', 'bltopvariab', 'blwindshear');
   ###### ADD POSSIBLE SOUNDINGS  (corresponding data must be set in file ../WRF/NCL/rasp.ncl.region.data)
   #4soundings: push @{$PARAMETER_DOLIST{'PYR2'}}, ( 'sounding1','sounding2' );  
 ######  SET GRID LOCAL TIME
