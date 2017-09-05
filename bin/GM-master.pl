@@ -1812,6 +1812,9 @@ $PROXY = "";
                 }
               }
               $starthh4dom[1] = $DOMAIN1_STARTHH{$regionname}[$IWINDOW];
+              if (length($starthh4dom[1])==1) {
+                $starthh4dom[1]="0".$starthh4dom[1];
+              }
 
               ### ALLOW DIFFERENT STARTS FOR DIFFERENT DOMAINS
               for ( $idomain=2 ; $idomain<=$MAXDOMAIN{$regionname}[$IWINDOW] ; $idomain++ ) {
