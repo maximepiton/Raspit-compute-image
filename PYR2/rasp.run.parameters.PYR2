@@ -37,7 +37,7 @@
   #4soundings: push @{$PARAMETER_DOLIST{'PYR2'}}, ( 'sounding1','sounding2' );  
 ######  SET GRID LOCAL TIME
   $LOCALTIME_ID{'PYR2'} = 'CET' ;
-  $LOCALTIME_ADJ{'PYR2'} = 0 ; 
+  $LOCALTIME_ADJ{'PYR2'} = 2 ; 
 ###### SET GRIB FILE PROCESSING 
   ### GRIBFILES_PER_FORECAST_PERIOD IS NUMBER OF GRIB FILES PROCESSED AT SAME TIME
   #12hr_run:
@@ -46,8 +46,10 @@
   ### BLIPMAPFILEDOLIST LISTS ALL GRIB FILES NEEDED
   %GRIBFILE_DOLIST = 
   (
+    #Run du petit matin oklm : GRIB init @ 0h UTC, dispo à 4h UTC = 6h CET
+    #'PYR2'   => [ '0Z+9','0Z+12','0Z+15','0Z+18','0Z+21' ],
     #4immediaterun: 
-  'PYR2'   => [ '0Z+12','0Z+15','0Z+18','0Z+21','0Z+24' ],
+    #'PYR2'   => [ '0Z+12','0Z+15','0Z+18','0Z+21','0Z+24' ],
     #once-daily_12_hr_run (earlyAM):      'PYR2'   => [ '6Z+6','6Z+9','6Z+12','6Z+15','6Z+18' ],
     #once-daily_15_hr_run (earlyAM):      'PYR2'   => [ '6Z+6','6Z+9','6Z+12','6Z+15','6Z+18','6Z+21' ],
     #once-daily_15_hr_run (lateAM):      'PYR2'   => [ '12Z+0','12Z+3','12Z+6','12Z+9','12Z+12','12Z+15' ],
@@ -59,26 +61,30 @@
   $FORECAST_PERIODHRS{'PYR2'}[0] = 12;              # used only by initialization programs
   #15hr_run:    $FORECAST_PERIODHRS{'PYR2'}[0] = 15;       # used only by initialization programs
   ### SET DOMAIN START/END TIMES
-  $DOMAIN1_STARTHH{'PYR2'}[0] = '12';               # must have grib file available for this time
+  $DOMAIN1_STARTHH{'PYR2'}[0] = '9';               # must have grib file available for this time
   #12hr_run:
-  $DOMAIN1_ENDHH{'PYR2'}[0] = '00';                 # 
+  $DOMAIN1_ENDHH{'PYR2'}[0] = '21';                 # 
   #15hr_run:    $DOMAIN1_ENDHH{'PYR2'}[0] = '03';              # 
   $DOMAIN2_START_DELTAMINS{'PYR2'}[0] = 0;          # if non-zero, must set namelist.template INPUT_FROM_FILE=false
   $DOMAIN2_END_DELTAMINS{'PYR2'}[0] = 0;            # relative to domain1
   $DOMAIN3_START_DELTAMINS{'PYR2'}[0] = 420;        # if non-zero, must set namelist.template INPUT_FROM_FILE=false
   $DOMAIN3_END_DELTAMINS{'PYR2'}[0] = -120;         # relative to domain1
   ### SET MODEL TIME STEP
-  $DOMAIN1_TIMESTEP{'PYR2'}[0] = 60.;               # over-rides namelist.template TIME_STEP
+  $DOMAIN1_TIMESTEP{'PYR2'}[0] = 80.;               # over-rides namelist.template TIME_STEP
   ### SET BOUNDARY UPDATE PERIODS
   $BOUNDARY_UPDATE_PERIODHRS{'PYR2'}[0] = 3;        # used only by initialization programs
   $NDOWN_BOUNDARY_UPDATE_PERIODHRS{'PYR2'}[0] = 0 ; # should always be 0 for non-windowed case
   ### SET BLIPMAP IMAGE SIZES  - 1st,2nd value for 1st,2nd domain - blank=NOplot
   @{$PLOT_IMAGE_SIZE{'PYR2'}[0]} = ( '', '800x800' );
   ### SET HISTORY HOUR FOR IMAGES PLOTTED WHEN $PLOT_IMAGE_SIZE FOR THAT DOMAIN NOT BLANK
+  #Run du petit matin oklm
+  @{$PLOT_HHMMLIST{'PYR2'}[0]} =  ( '0900', '1200', '1500', '1800', '2100' );
   #12hr_run:
-  @{$PLOT_HHMMLIST{'PYR2'}[0]} =  ( '1200', '1500', '1800', '2100', '0000' );
+  #@{$PLOT_HHMMLIST{'PYR2'}[0]} =  ( '1200', '1500', '1800', '2100', '0000' );
   #15hr_run:  @{$PLOT_HHMMLIST{'PYR2'}[0]} =  ( '1200', '1500', '1800', '2100', '0000','0300' );
   ### CREATE WEBSITE IMAGE LOOP
+  #Run du petit matin oklm
+  @{$PLOT_LOOP_HHMMLIST{'PYR2'}[0]} =  ( 'title', '0900', '1200', '1500', '1800', '2100' );
   #12hr_run:
   @{$PLOT_LOOP_HHMMLIST{'PYR2'}[0]} =  ( 'title', '1200', '1500', '1800', '2100', '0000' );
   #15hr:  @{$PLOT_LOOP_HHMMLIST{'PYR2'}[0]} =  ( 'title', '1200', '1500','1800', '2100', '0000', '0300' );
@@ -86,6 +92,18 @@
   #12hr_run:
   @{$SAVE_PLOT_HHMMLIST{'PYR2'}[0]} = ( '2100' );
   #15hr:  @{$SAVE_PLOT_HHMMLIST{'PYR2'}[0]} = ( '1800','2100','0000','0300' );
+    
+  # Forecast day adjustment : export START_HOUR=33 for d+1 or 57 for d+2, etc
+  $start = int($DOMAIN1_STARTHH{'PYR2'}[0]);
+  if(defined $ENV{'START_HOUR'}) {
+    $start = int($ENV{'START_HOUR'});
+  }
+
+  for ($i = 0; $i < $GRIBFILES_PER_FORECAST_PERIOD{'PYR2'}; $i++) {
+     $forecast = ($start + 3*$i);
+     $GRIBFILE_DOLIST{'PYR2'}[$i] = "0Z+${forecast}";
+  }
+
 ###### SET DOMAIN PARAMETERS FOR STAGE2 [WINDOWED] ITERATION (not used if no windowing done)
   $FORECAST_PERIODHRS{'PYR2'}[1] = 3;       
   ### SET DOMAIN START/END TIMES
