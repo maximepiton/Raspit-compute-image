@@ -101,7 +101,7 @@
   }
 
   for ($i = 0; $i < $GRIBFILES_PER_FORECAST_PERIOD{'PYR3'}; $i++) {
-     $forecast = ($start + 3*$i);
+     $forecast = ($start + 3*$i - $modrun);
      $GRIBFILE_DOLIST{'PYR3'}[$i] = "${modrun}Z+${forecast}";
   }
 
