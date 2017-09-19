@@ -4,10 +4,10 @@ WRF-ARW Weather forecast service for SW France
 
 ## Content
 
-PYR2/ : 1-stage 0.5deg GFS initialized 6km grid
-PYR3/ : 1-stage 0.25deg GFS initialized 3km grid
-Docker-rasp-wrfv3/ : Generic wrfv3 rasp dockerfile
-Docker-raspit-backend-prod/ : dockerfile of a "production" image derived from the above
+* PYR2/ : 1-stage 0.5deg GFS initialized 6km grid
+* PYR3/ : 1-stage 0.25deg GFS initialized 3km grid
+* Docker-rasp-wrfv3/ : Generic wrfv3 rasp dockerfile
+* Docker-raspit-backend-prod/ : dockerfile of a "production" image derived from the above
 
 ## How to build (optional)
 
