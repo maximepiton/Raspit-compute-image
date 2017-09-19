@@ -11,7 +11,7 @@ function sweep {
 # Params : $1 : Domain ; $2 : run date
 function upload {
   echo "uploading "$1" to "$2
-  #lftp $FTP_ENDPOINT -e "cd hdd; cd OUT; mkdir "$2"; cd "$2"; mput /root/rasp/"$1"/OUT/*; quit"
+  lftp $FTP_ENDPOINT -e "cd hdd; cd OUT; mkdir "$2"; cd "$2"; mput /root/rasp/"$1"/OUT/*; quit"
 }
 
 # Function that copy a domain from the Raspit-backend folder (for development purposes only)
@@ -41,9 +41,6 @@ function one_day_run {
 # FTP_ENDPOINT environment variable must be set. Otherwise we quit.
 [ -z "$FTP_ENDPOINT" ] && echo "FTP_ENDPOINT not set. Exiting..." && exit 1;
 
-# Same for DEV_ENV
-[ -z "$DEV_ENV" ] && echo "DEV_ENV not set. Exiting..." && exit 1;
-
 # Depending on the current hour, we will use 0Z or 12Z grib files from the ncep servers
 currentHour=$(date -u +%H)
 if [ $currentHour -lt 16 ]
@@ -54,8 +51,8 @@ else
 fi
 echo "Model run : "$MODEL_RUN"Z"
 
-# We copy the GM & domain directories from our dev directory to the rasp directory if DEV_ENV=y
-if [[ ${DEV_ENV} -eq y ]]
+# We copy the GM & domain directories from our dev directory to the rasp directory if DEV_ENV is set
+if [[ -n "$DEV_ENV" ]]
 then
   echo "Development environment detected. Copying domains and GM folder from external volume..."
   cp_dev_domain PYR2
