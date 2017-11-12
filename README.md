@@ -1,6 +1,6 @@
-# Raspit-backend
+# Raspit-compute-image
 
-WRF-ARW Weather forecast service for SW France
+WRF-ARW Weather forecast compute image for SW France
 
 ## Content
 
@@ -13,10 +13,10 @@ WRF-ARW Weather forecast service for SW France
 
 ```
 git clone maximepiton/Raspit-backend
-cd Docker-rasp-wrfv3
-curl -SL http://rasp-uk.uk/SOFTWARE/WRFV3.x/raspGM.tgz
-curl -SL http://rasp-uk.uk/SOFTWARE/WRFV3.x/raspGM-bin.tgz
-curl -SL http://rasp-uk.uk/SOFTWARE/WRFV3.x/rangs.tgz
+cd Raspit-compute-image/Docker-rasp-wrfv3
+wget http://rasp-uk.uk/SOFTWARE/WRFV3.x/raspGM.tgz
+wget http://rasp-uk.uk/SOFTWARE/WRFV3.x/raspGM-bin.tgz
+wget http://rasp-uk.uk/SOFTWARE/WRFV3.x/rangs.tgz
 docker build -t rasp-wrfv3 .
 cd ../
 docker build -t raspit-backend-prod -f Docker-raspit-backend-prod/Dockerfile .
