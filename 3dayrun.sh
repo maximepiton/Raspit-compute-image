@@ -7,20 +7,29 @@ function sweep {
   rm -f met_em.d* ; rm -f wrfout* ; rm -f met_em* ; rm -f UNGRIB:* ; rm -f wrfinput_* ; rm -f GRIB/* ; rm -f OUT/*
 }
 
-# Function that uploads output images to a ftp servers
+# Function that uploads output images to a ftp server or a GCS bucket, depending on USE_FTP env. var
 # Params : $1 : Domain ; $2 : run date
 function upload {
-  echo "uploading "$1" to "$2
-  lftp $FTP_ENDPOINT -e "cd hdd; cd OUT; mkdir "$2"; cd "$2"; mput /root/rasp/"$1"/OUT/*; quit"
+  if [[ -n "$FTP_ENDPOINT" ]]
+  then
+    # /!\ needs to be updated to store wrfout files
+    echo "uploading "$1" to "$2
+    lftp $FTP_ENDPOINT -e "cd hdd; cd OUT; mkdir "$2"; cd "$2"; mput /root/rasp/"$1"/OUT/*; quit"
+  else
+    echo "uploading "$1" to the raspit GCS bucket"
+    gsutil rm -r gs://raspit/$(date --date="1 day ago" +%Y%m%d)
+    gsutil -m cp /root/rasp/$1/OUT/* gs://raspit/$2/OUT/
+    gsutil -m cp /root/rasp/$1/wrfout*d02*00:00 gs://raspit/$2/
+  fi
 }
 
-# Function that copy a domain from the Raspit-backend folder (for development purposes only)
+# Function that copy a domain from the Raspit-compute-image folder (for development purposes only)
 # Params : $1 : Domain
 function cp_dev_domain {
   cd /root/rasp
-  rm -rf $1 ; cp -r Raspit-backend/$1 . && mkdir $1/OUT && mkdir $1/LOG && mkdir $1/GRIB
-  cp --preserve=links region.TEMPLATE/rasp.site.* $1/ && cp --preserve=links region.TEMPLATE/*.TBL $1/ && cp --preserve=links region.TEMPLATE/RRTM_DATA $1/
-  cp --preserve=links region.TEMPLATE/ETAMPNEW_DATA.expanded_rain $1/
+  rm -rf $1 && mkdir $1  
+  cp --preserve=links -r region.TEMPLATE/* $1/
+  cp -r Raspit-compute-image/$1/* $1/
   cp $1/namelist.input $1/namelist.input.template && cp $1/namelist.wps $1/namelist.wps.template
 }
 
@@ -38,8 +47,8 @@ function one_day_run {
   sweep $1
 }
 
-# FTP_ENDPOINT environment variable must be set. Otherwise we quit.
-[ -z "$FTP_ENDPOINT" ] && echo "FTP_ENDPOINT not set. Exiting..." && exit 1;
+# FTP_ENDPOINT environment variable check. If not set, we will store the output data in a GCS bucket
+[ -z "$FTP_ENDPOINT" ] && echo "FTP_ENDPOINT not set. Google cloud storage will be used.";
 
 # Depending on the current hour, we will use 0Z or 12Z grib files from the ncep servers
 currentHour=$(date -u +%H)
@@ -57,7 +66,7 @@ then
   echo "Development environment detected. Copying domains and GM folder from external volume..."
   cp_dev_domain PYR2
   cp_dev_domain PYR3
-  cp -r Raspit-backend/GM /root/rasp/
+  cp -r Raspit-compute-image/GM /root/rasp/
 else
   echo "Production environment detected. Domains should already be in the rasp directory"
 fi

@@ -7,7 +7,7 @@ RUN mkdir $BASEDIR
 # required packages
 RUN yum -y update \
   && yum -y install netcdf-fortran libpng15 iproute-tc tcp_wrappers-libs sendmail procmail psmisc procps-ng mailx \
-  findutils ImageMagick perl-CPAN ncl netcdf libpng libjpeg-turbo which patch vim less lftp nano
+  findutils ImageMagick perl-CPAN ncl netcdf libpng libjpeg-turbo which patch vim less lftp nano python
 
 # configure CPAN and install required modules
 RUN (echo y;echo o conf prerequisites_policy follow;echo o conf commit) | cpan \
@@ -28,13 +28,6 @@ ADD raspGM.tgz $BASEDIR
 ADD raspGM-bin.tgz $BASEDIR
 ADD rangs.tgz $BASEDIR
 
-#
-# Alternatively tell the script to download them
-#
-#RUN curl -SL http://rasp-uk.uk/SOFTWARE/WRFV3.x/raspGM.tgz | tar xC $BASEDIR
-#RUN curl -SL http://rasp-uk.uk/SOFTWARE/WRFV3.x/raspGM-bin.tgz | tar xC $BASEDIR
-#RUN curl -SL http://rasp-uk.uk/SOFTWARE/WRFV3.x/rangs.tgz | tar xC $BASEDIR
-
 # Patch files with fixes
 COPY GM-master.pl.patch /root/
 RUN cd $BASEDIR/bin \
@@ -46,6 +39,14 @@ RUN cd $BASEDIR/bin \
 #
 RUN echo export BASEDIR=$BASEDIR >> /etc/bashrc \
   && echo export PATH+=:\$BASEDIR/bin >> /etc/bashrc
+
+#
+# gsutil install
+#
+WORKDIR /root/
+RUN curl https://storage.googleapis.com/pub/gsutil.tar.gz | tar zx
+ENV PATH "$PATH:/root/gsutil"
+COPY .boto .
 
 # cleanup
 RUN yum clean all
