@@ -7,32 +7,32 @@ WRF-ARW Weather forecast compute image for SW France
 * PYR2/ : 1-stage 0.5deg GFS initialized 6km grid
 * PYR3/ : 1-stage 0.25deg GFS initialized 3km grid
 * Docker-rasp-wrfv3/ : Generic wrfv3 rasp dockerfile
-* Docker-raspit-backend-prod/ : dockerfile of a "production" image derived from the above
+* Docker-raspit-compute-image-prod/ : dockerfile of a "production" image derived from the above
 
 ## How to build (optional)
 
 ```
-git clone maximepiton/Raspit-backend
+git clone maximepiton/Raspit-compute-image
 cd Raspit-compute-image/Docker-rasp-wrfv3
 wget http://rasp-uk.uk/SOFTWARE/WRFV3.x/raspGM.tgz
 wget http://rasp-uk.uk/SOFTWARE/WRFV3.x/raspGM-bin.tgz
 wget http://rasp-uk.uk/SOFTWARE/WRFV3.x/rangs.tgz
 docker build -t rasp-wrfv3 .
 cd ../
-docker build -t raspit-backend-prod -f Docker-raspit-backend-prod/Dockerfile .
+docker build -t raspit-compute-image-prod -f Docker-raspit-compute-image-prod/Dockerfile .
 ```
 
 ## How to setup a development environment
 
 ```
-git clone maximepiton/Raspit-backend
-docker run -it -e "FTP_ENDPOINT=user:pass@server:port" -e "DEV_ENV=y" -v path_to_Raspit-backend:/root/rasp/Raspit-backend maximepiton/rasp-wrfv3
+git clone maximepiton/Raspit-compute-image
+docker run -it -e "FTP_ENDPOINT=user:pass@server:port" -e "DEV_ENV=y" -v path_to_Raspit-compute-image:/root/rasp/Raspit-compute-image maximepiton/rasp-wrfv3
 ```
 
 ## How to use at production
 
 ```
-docker run -e "FTP_ENDPOINT=user:pass@server:port" --rm maximepiton/raspit-backend-prod
+docker run -e "FTP_ENDPOINT=user:pass@server:port" --rm maximepiton/raspit-compute-image-prod
 ```
 
 
