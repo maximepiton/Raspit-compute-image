@@ -46,7 +46,6 @@ RUN echo export BASEDIR=$BASEDIR >> /etc/bashrc \
 WORKDIR /root/
 RUN curl https://storage.googleapis.com/pub/gsutil.tar.gz | tar zx
 ENV PATH "$PATH:/root/gsutil"
-COPY .boto .
 
 # cleanup
 RUN yum clean all

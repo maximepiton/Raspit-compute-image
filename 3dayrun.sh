@@ -60,13 +60,14 @@ else
 fi
 echo "Model run : "$MODEL_RUN"Z"
 
-# We copy the GM & domain directories from our dev directory to the rasp directory if DEV_ENV is set
+# We copy the GM & domain directories, and the boto file from our dev directory to the rasp directory if DEV_ENV is set
 if [[ -n "$DEV_ENV" ]]
 then
   echo "Development environment detected. Copying domains and GM folder from external volume..."
   cp_dev_domain PYR2
   cp_dev_domain PYR3
   cp -r Raspit-compute-image/GM /root/rasp/
+  cp Raspit-compute-image/Docker-rasp-wrfv3/.boto /root/
 else
   echo "Production environment detected. Domains should already be in the rasp directory"
 fi
