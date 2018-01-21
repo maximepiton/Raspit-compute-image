@@ -21,6 +21,7 @@ function upload {
     echo "uploading "$1" to "$GCS_BUCKET" GCS bucket"
     gsutil rm -r gs://"$GCS_BUCKET"/$(date --date="1 day ago" +%Y%m%d)
     gsutil -m cp /root/rasp/$1/OUT/* gs://"$GCS_BUCKET"/$2/OUT/
+    gsutil acl -r ch -u AllUsers:R gs://"$GCS_BUCKET"/$2/OUT/*
     gsutil -m cp /root/rasp/$1/wrfout*d02*00:00 gs://"$GCS_BUCKET"/$2/
   else
     echo "ERROR : either FTP_ENDPOINT or GCS_BUCKET must be set for the \
