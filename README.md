@@ -25,14 +25,26 @@ docker build -t raspit-compute-image-prod -f Docker-raspit-compute-image-prod/Do
 ## How to setup a development environment
 
 ```
-git clone maximepiton/Raspit-compute-image
-docker run -it -e "FTP_ENDPOINT=user:pass@server:port" -e "DEV_ENV=y" -v path_to_Raspit-compute-image:/root/rasp/Raspit-compute-image maximepiton/rasp-wrfv3
+# To use an FTP server to store output files :
+docker run -it \
+    -e "FTP_ENDPOINT=user:pass@server:port" \
+    -e "DEV_ENV=y" \
+    -v path_to_Raspit-compute-image:/root/rasp/Raspit-compute-image \
+    rasp-wrfv3
+# To use Google Cloud Storage to store output files :
+docker run -it \
+    -e "GCS_BUCKET=bucket_name" \
+    -e "DEV_ENV=y" \
+    -v path_to_Raspit-compute-image:/root/rasp/Raspit-compute-image \
+    rasp-wrfv3
 ```
 
 ## How to use at production
 
 ```
-docker run -e "FTP_ENDPOINT=user:pass@server:port" --rm maximepiton/raspit-compute-image-prod
+docker run -e "FTP_ENDPOINT=user:pass@server:port" --rm raspit-compute-image-prod
+# or
+docker run -e "GCS_BUCKET=bucket_name" --rm raspit-compute-image-prod
 ```
 
 

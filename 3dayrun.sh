@@ -7,7 +7,8 @@ function sweep {
   rm -f met_em.d* ; rm -f wrfout* ; rm -f met_em* ; rm -f UNGRIB:* ; rm -f wrfinput_* ; rm -f GRIB/* ; rm -f OUT/*
 }
 
-# Function that uploads output images to a ftp server or a GCS bucket, depending on USE_FTP env. var
+# Function that uploads output images to a ftp server or a GCS bucket, 
+# depending on USE_FTP and GCS_BUCKET environment variables
 # Params : $1 : Domain ; $2 : run date
 function upload {
   if [[ -n "$FTP_ENDPOINT" ]]
@@ -15,11 +16,16 @@ function upload {
     # /!\ needs to be updated to store wrfout files
     echo "uploading "$1" to "$2
     lftp $FTP_ENDPOINT -e "cd hdd; cd OUT; mkdir "$2"; cd "$2"; mput /root/rasp/"$1"/OUT/*; quit"
+  elif [[ -n "$GCS_BUCKET" ]]
+  then
+    echo "uploading "$1" to "$GCS_BUCKET" GCS bucket"
+    gsutil rm -r gs://"$GCS_BUCKET"/$(date --date="1 day ago" +%Y%m%d)
+    gsutil -m cp /root/rasp/$1/OUT/* gs://"$GCS_BUCKET"/$2/OUT/
+    gsutil -m cp /root/rasp/$1/wrfout*d02*00:00 gs://"$GCS_BUCKET"/$2/
   else
-    echo "uploading "$1" to the raspit GCS bucket"
-    gsutil rm -r gs://raspit/$(date --date="1 day ago" +%Y%m%d)
-    gsutil -m cp /root/rasp/$1/OUT/* gs://raspit/$2/OUT/
-    gsutil -m cp /root/rasp/$1/wrfout*d02*00:00 gs://raspit/$2/
+    echo "ERROR : either FTP_ENDPOINT or GCS_BUCKET must be set for the \
+      output files to be uploaded"
+    exit 1
   fi
 }
 
